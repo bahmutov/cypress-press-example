@@ -133,7 +133,7 @@
   <body>
     <div class="login-container">
       <h1 class="form-title">Login</h1>
-      <form id="loginForm" novalidate>
+      <form id="loginForm" novalidate action="/login" method="POST">
         <div class="form-group">
           <label for="username">Username</label>
           <input
@@ -144,6 +144,8 @@
             aria-required="true"
             aria-label="Username"
             placeholder="Enter your username"
+            tabindex="1"
+            autofocus
           />
           <span class="error-message">Username is required</span>
         </div>
@@ -158,6 +160,7 @@
             aria-required="true"
             aria-label="Email"
             placeholder="Enter your email"
+            tabindex="2"
           />
           <span class="error-message"
             >Please enter a valid email</span
@@ -174,6 +177,7 @@
             aria-required="true"
             aria-label="Password"
             placeholder="Enter your password"
+            tabindex="3"
           />
           <span class="error-message">Password is required</span>
         </div>
@@ -185,11 +189,14 @@
             name="terms"
             required
             aria-required="true"
+            tabindex="4"
           />
           <label for="terms">I accept the terms and conditions</label>
         </div>
 
-        <button type="submit" class="submit-button">Login</button>
+        <button type="submit" class="submit-button" tabindex="5">
+          Login
+        </button>
       </form>
     </div>
 
@@ -198,7 +205,55 @@
         .getElementById('loginForm')
         .addEventListener('submit', function (e) {
           e.preventDefault()
-          // Add your form submission logic here
+
+          // Get form values
+          const username = document.getElementById('username').value
+          const email = document.getElementById('email').value
+          const password = document.getElementById('password').value
+          const terms = document.getElementById('terms').checked
+
+          // Basic validation
+          if (!username || !email || !password || !terms) {
+            alert('Please fill in all fields and accept the terms')
+            return
+          }
+
+          // Email validation
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+          if (!emailRegex.test(email)) {
+            alert('Please enter a valid email address')
+            return
+          }
+
+          // Create form data
+          const formData = new FormData()
+          formData.append('username', username)
+          formData.append('email', email)
+          formData.append('password', password)
+          formData.append('terms', terms)
+
+          // Submit form
+          fetch('/login', {
+            method: 'POST',
+            body: formData,
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok')
+              }
+              return response.json()
+            })
+            .then((data) => {
+              // Handle successful submission
+              alert('Login successful!')
+              // You can redirect or update the UI here
+            })
+            .catch((error) => {
+              console.error('Error:', error)
+              alert(
+                'An error occurred during submission. Please try again.',
+              )
+            })
         })
     </script>
   </body>
