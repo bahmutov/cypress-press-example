@@ -6,7 +6,11 @@ describe('Login Form', () => {
   })
 
   it('should use tab to navigate through the form', () => {
-    cy.get('#username').type('joe').press(Cypress.Keyboard.Keys.TAB)
+    cy.get('.error-message:visible').should('have.length', 3)
+    cy.get('#username')
+      .should('have.attr', 'autofocus', 'autofocus')
+      .type('joe')
+      .press(Cypress.Keyboard.Keys.TAB)
     cy.get('#email')
       .should('be.focused')
       .type('joe@example.com')

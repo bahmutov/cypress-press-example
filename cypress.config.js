@@ -1,6 +1,7 @@
 const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
+  defaultBrowser: 'electron',
   e2e: {
     // baseUrl, etc
     supportFile: false,
@@ -9,5 +10,5 @@ module.exports = defineConfig({
       // implement node event listeners here
       // and load any plugins that require the Node environment
     },
-  }
+  },
 })
