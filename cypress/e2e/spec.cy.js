@@ -19,8 +19,12 @@ describe('Login Form', () => {
       .should('be.focused')
       .check()
       .press(Cypress.Keyboard.Keys.TAB)
-    cy.get('.submit-button').should('be.focused').click()
 
     cy.get('.error-message').should('not.be.visible')
+    cy.intercept('POST', '/login', { body: { success: true } }).as(
+      'login',
+    )
+    cy.get('.submit-button').should('be.focused').click()
+    cy.wait('@login')
   })
 })
